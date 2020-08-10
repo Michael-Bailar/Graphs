@@ -163,7 +163,33 @@ class Graph:
         # Return a list containing a path from starting_vertex to destination_vertex
         # in depth-first order.
         # This should be done using recursion.
-        pass  # TODO
+        s = Stack()
+        visited = set()
+
+        
+
+
+        def dft(path, destination_vertex):
+            v = path[-1]
+            if v == destination_vertex:
+                print(path)
+                return(path)
+            else:
+                visited.add(v)
+                for neighbor in self.get_neighbors(v):
+                    if neighbor not in visited:
+                        new_path = path.copy()
+                        new_path.append(neighbor)
+                        s.push(new_path)
+                    if s.size() > 0:
+                        next_path = s.pop()
+                        dft(next_path, destination_vertex)
+            return None
+            
+        dft([starting_vertex], destination_vertex)
+
+
+        return None
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
@@ -190,7 +216,7 @@ if __name__ == '__main__':
     Should print:
         {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
     '''
-    print(graph.vertices)
+    # print(graph.vertices)
 
     '''
     Valid BFT paths:
@@ -207,8 +233,8 @@ if __name__ == '__main__':
         1, 2, 4, 3, 7, 6, 5
         1, 2, 4, 3, 7, 5, 6
     '''
-    print("bft")
-    graph.bft(1)
+    # print("bft")
+    # graph.bft(1)
 
     '''
     Valid DFT paths:
@@ -217,16 +243,16 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
-    print("dft")
-    graph.dft(1)
-    print("recurse")
-    graph.dft_recursive(1)
+    # print("dft")
+    # graph.dft(1)
+    # print("recurse")
+    # graph.dft_recursive(1)
 
     '''
     Valid BFS path:
         [1, 2, 4, 6]
     '''
-    print(graph.bfs(1, 6))
+    # print(graph.bfs(1, 6))
 
     '''
     Valid DFS paths:
@@ -234,4 +260,4 @@ if __name__ == '__main__':
         [1, 2, 4, 7, 6]
     '''
     # print(graph.dfs(1, 6))
-    # print(graph.dfs_recursive(1, 6))
+    print(graph.dfs_recursive(1, 6))
