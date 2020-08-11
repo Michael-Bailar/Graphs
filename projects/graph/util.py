@@ -23,6 +23,6 @@ class Stack():
             return self.stack.pop()
         else:
             return None
-    def size(self):
+    def size(selfLK):
         return len(self.stack)
 

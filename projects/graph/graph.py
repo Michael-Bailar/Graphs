@@ -73,21 +73,29 @@ class Graph:
                 for next_vertex in self.get_neighbors(v):
                     s.push(next_vertex)
 
-    def dft_recursive(self, starting_vertex):
-        s = Stack()
+    def dft_recursive(self, starting_vertex, visited=None):
         visited = set()
+        visited.add(starting_vertex)
+        print(starting_vertex)
 
-        def dft(vertex):
-            print(vertex)
-            visited.add(vertex)
-            for neighbor in self.get_neighbors(vertex):
-                if neighbor not in visited:
-                    s.push(neighbor)
-                if s.size() > 0:
-                    next_vertex = s.pop()  
-                    dft(next_vertex)
+        for v in self.get_neighbors(starting_vertex):
+            if v not in visited:
+                self.dft_recursive(v, visited)
 
-        dft(starting_vertex) 
+        # s = Stack()
+        # visited = set()
+
+        # def dft(vertex):
+        #     print(vertex)
+        #     visited.add(vertex)
+        #     for neighbor in self.get_neighbors(vertex):
+        #         if neighbor not in visited:
+        #             s.push(neighbor)
+        #         if s.size() > 0:
+        #             next_vertex = s.pop()  
+        #             dft(next_vertex)
+
+        # dft(starting_vertex) 
 
     def bfs(self, starting_vertex, destination_vertex):
         # Return a list containing the shortest path from starting_vertex to
@@ -166,9 +174,6 @@ class Graph:
         s = Stack()
         visited = set()
 
-        
-
-
         def dft(path, destination_vertex):
             v = path[-1]
             if v == destination_vertex:
@@ -185,10 +190,7 @@ class Graph:
                         next_path = s.pop()
                         dft(next_path, destination_vertex)
             return None
-            
         dft([starting_vertex], destination_vertex)
-
-
         return None
 
 if __name__ == '__main__':
@@ -246,7 +248,7 @@ if __name__ == '__main__':
     # print("dft")
     # graph.dft(1)
     # print("recurse")
-    # graph.dft_recursive(1)
+    graph.dft_recursive(1)
 
     '''
     Valid BFS path:
@@ -260,4 +262,4 @@ if __name__ == '__main__':
         [1, 2, 4, 7, 6]
     '''
     # print(graph.dfs(1, 6))
-    print(graph.dfs_recursive(1, 6))
+    # print(graph.dfs_recursive(1, 6))
