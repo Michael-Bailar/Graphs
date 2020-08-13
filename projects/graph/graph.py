@@ -74,7 +74,9 @@ class Graph:
                     s.push(next_vertex)
 
     def dft_recursive(self, starting_vertex, visited=None):
-        visited = set()
+        if visited is None:
+            visited = set()
+
         visited.add(starting_vertex)
         print(starting_vertex)
 
@@ -95,7 +97,7 @@ class Graph:
         #             next_vertex = s.pop()  
         #             dft(next_vertex)
 
-        # dft(starting_vertex) 
+        dft(starting_vertex) 
 
     def bfs(self, starting_vertex, destination_vertex):
         # Return a list containing the shortest path from starting_vertex to

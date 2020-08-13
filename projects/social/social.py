@@ -1,4 +1,5 @@
 import random
+import time
 
 class User:
     def __init__(self, name):
@@ -29,12 +30,15 @@ class SocialGraph:
         Creates a bi-directional friendship
         """
         if user_id == friend_id:
-            print("WARNING: You cannot be friends with yourself")
+            # print("WARNING: You cannot be friends with yourself")
+            return False
         elif friend_id in self.friendships[user_id] or user_id in self.friendships[friend_id]:
-            print("WARNING: Friendship already exists")
+            # print("WARNING: Friendship already exists")
+            return False
         else:
             self.friendships[user_id].add(friend_id)
             self.friendships[friend_id].add(user_id)
+            return True
 
     def add_user(self, name):
         """
@@ -43,6 +47,30 @@ class SocialGraph:
         self.last_id += 1  # automatically increment the ID to assign the new user
         self.users[self.last_id] = User(name)
         self.friendships[self.last_id] = set()
+
+    def populate_graph_linear(self, num_users, avg_friendships):
+        # Reset graph
+        self.last_id = 0
+        self.users = {}
+        self.friendships = {}
+        # Add users
+        for i in range(0, num_users):
+            self.add_user(f"User {i}")
+
+        target_friendships = (num_users * avg_friendships)
+        total_friendships = 0
+        collisions = 0
+
+        while total_friendships < target_friendships:
+            user_id = random.randint(1, self.last_id)
+            friend_id = random.randint(1, self.last_id)
+
+            if self.add_friendship(user_id, friend_id):
+                total_friendships += 2
+            else:
+                collisions += 1
+        
+        print(f"Collisions {collisions}")
 
     def populate_graph(self, num_users, avg_friendships):
         """
@@ -108,56 +136,31 @@ class SocialGraph:
                     path_copy.append(friend)
                     q.enqueue(path_copy)
         return visited
-        # q = Queue()
-        # initial_user = {user_id: [user_id]}
-        # q.enqueue(initial_user)
-        
 
-        # while q.size() > 0:
-        #     current = q.dequeue()
-        #     current_user = list(current.keys())[0]
-        #     current_path = list(current.values())[0]
-        #     visited[current_user] = current_path
-        #     current_friends = self.friendships[current_user]
-        #     for friend in current_friends:
-        #         if friend not in visited and friend not in q.queue:
-        #             q_path = current_path.copy()
-        #             q_path.append(friend)
-        #             q_user = {friend: q_path}
-        #             q.enqueue(q_user)
 
-        
-        # return visited
+# if __name__ == '__main__':
+#     sg = SocialGraph()
+#     sg.populate_graph(1000, 2)
+#     connections = sg.get_all_social_paths(1)
+#     print(f"Users in extended social network: {len(connections) -1}")
+#     total_social_paths = 0
+#     for user_id in connections:
+#         total_social_paths += len(connections[user_id])
+#     print(f"Avg length of social path: {total_social_paths / len(connections) - 1}")
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populate_graph(1000, 2)
-    connections = sg.get_all_social_paths(1)
-    print(f"Users in extended social network: {len(connections) -1}")
-    total_social_paths = 0
-    for user_id in connections:
-        total_social_paths += len(connections[user_id])
-    print(f"Avg length of social path: {total_social_paths / len(connections) - 1}")
-    # print("*****************************************")
-    # print(f"add_friendships was called {sg.add_friendship_count} times")
-    # # run connections for everyone in the list. then get an average
-    # # percent of total users in connections
-    # social_path_count_sum = 0
-    # degree_of_seperation_count_sum = 0
-    # for i in sg.users:
-    #     test_connections = sg.get_all_social_paths(i)
-    #     paths = len(test_connections)
-    #     social_path_count_sum += paths
-    #     # final_connection_list = test_connections[paths -1]
-    #     # # print(final_connection_list)
-    #     # degree_of_seperation_count_sum += degree_of_seperation
-
-
-  
-    # average_social_path_count = social_path_count_sum/len(sg.users)
-    # social_path_average_percent = average_social_path_count/len(sg.users)*100
-    # print(f"On average, a user's social network includes {social_path_average_percent} percent of total users")
-    
-    # # average degree of seperation 
-    # print("average DOS", degree_of_seperation_count_sum/len(sg.users))
+    start_time = time.time()
+    num_users = 2000
+    avg_friendships = 1500
+    start_time = time.time()
+    sg.populate_graph_linear(num_users, avg_friendships)
+    # print(sg.friendships)
+    end_time = time.time()
+    print (f"Linear runtime: {end_time - start_time} seconds")
+    sg = SocialGraph()
+    start_time = time.time()
+    sg.populate_graph(num_users, avg_friendships)
+    end_time = time.time()
+    print (f"Quadratic runtime: {end_time - start_time} seconds")
