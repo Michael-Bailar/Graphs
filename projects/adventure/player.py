@@ -8,4 +8,8 @@ class Player:
             if (show_rooms):
                 next_room.print_room_description(self)
         else:
-            print("You cannot move in that direction.")
+            pass
+            # print("You cannot move in that direction.")
+    def set_current_room(self, location):
+        self.current_room = location
+        return location
